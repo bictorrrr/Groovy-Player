@@ -26,7 +26,7 @@ def reproducir_cancion(eleccion, page: ft.Page):
         if isinstance(component, ft.Audio):
             page.overlay.remove(component)
             break
-
+    progreso = ft.ProgressBar(value=0.0, color=ft.colors.RED_800, bgcolor=ft.colors.GREEN_500)
     # Crear y añadir el nuevo componente de audio
     audio1 = ft.Audio(
         src=url,
@@ -34,10 +34,16 @@ def reproducir_cancion(eleccion, page: ft.Page):
         volume=1,
         balance=0,
         on_loaded=lambda _: print(f"Loaded: {url}"),
-        on_duration_changed=lambda e: print("Duration changed:", e.data),
-        on_position_changed=lambda e: print("Position changed:", e.data),
+        on_duration_changed=lambda _: print("Ha cambiado la duracion"),
+        on_position_changed=lambda e: actualizar_progreso(e),
         on_state_changed=lambda e: print("State changed:", e.data),
         on_seek_complete=lambda _: print("Seek complete"),
     )
+    def actualizar_progreso(e):
+        if audio1.get_duration() > 0:
+            progreso.value = audio1.get_current_position() / audio1.get_duration()
+        page.update()
+
     page.overlay.append(audio1)
+    page.overlay.append(progreso)
     page.update()
