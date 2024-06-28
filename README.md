@@ -1,9 +1,8 @@
-# A musica_oficina Flet app
+# Groovy: Reproductor musical
 
-An example of a minimal Flet app.
-
-To run the app:
+Reproductor de musica local o drive (en trabajo)
+Inicializar app:
 
 ```
-flet run [app_directory]
+flet run main.py
 ```
