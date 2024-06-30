@@ -2,7 +2,7 @@ import flet as ft
 import os
 import json
 
-reproducir = r"\\192.168.1.250\users\MUSICA\Albumes"
+reproducir = r"C:\Users\victo\Music\MUSICA\Albumes"
 album = ""
 cancion = ""
 

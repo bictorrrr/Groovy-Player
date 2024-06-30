@@ -3,7 +3,7 @@ import json
 import os
 from assets.metodos import reproducir_cancion
 
-reproducir = r"\\192.168.1.250\users\MUSICA\Albumes"
+reproducir = r"C:\Users\victo\Music\MUSICA\Albumes"
 
 def mostrar_canciones(page: ft.Page, canciones_listview: ft.ListView, audio1: ft.Audio):
     with open('assets/ruta.json', 'r') as f:

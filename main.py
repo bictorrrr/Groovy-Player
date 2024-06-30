@@ -9,7 +9,7 @@ with open('assets/ruta.json', 'r') as f:
     data = json.load(f)
 ruta = os.getcwd()
 print(ruta)
-reproducir = r"\\192.168.1.250\users\MUSICA\Albumes"
+reproducir = r"C:\Users\victo\Music\MUSICA\Albumes"
 album = data['Album']
 cancion = data['Cancion']
 url = reproducir+"\\"+album+"\\"+cancion
