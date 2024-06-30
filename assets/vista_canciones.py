@@ -17,7 +17,7 @@ def mostrar_canciones(page: ft.Page, canciones_listview: ft.ListView, audio1: ft
         for archivo in os.listdir(path):
             if archivo.endswith(".flac"):
                 cancion_nombre = os.path.splitext(archivo)[0]
-                canciones_listview.controls.append(ft.ListTile(leading=ft.Text(f"{numero}"),title=ft.Text(cancion_nombre), trailing=ft.IconButton(icon=ft.icons.PLAY_ARROW, bgcolor=ft.colors.RED_900, icon_color=ft.colors.WHITE, on_click= lambda _, cancion = cancion_nombre: reproducir_cancion(cancion, page))))
+                canciones_listview.controls.append(ft.ListTile(leading=ft.Text(f"{numero}"),title=ft.Text(cancion_nombre), trailing=ft.IconButton(icon=ft.icons.PLAY_ARROW, bgcolor=ft.colors.DEEP_PURPLE, icon_color=ft.colors.WHITE, on_click= lambda _, cancion = cancion_nombre: reproducir_cancion(cancion, page))))
                 numero += 1
     
     page.update()

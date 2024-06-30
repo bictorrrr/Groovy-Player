@@ -35,7 +35,12 @@ audio1 = ft.Audio(
     )
 
 def main(page: ft.Page):
-    
+    page.title = "Groovy Player 🎵"
+    page.theme_mode = ft.ThemeMode.LIGHT
+    page.theme = ft.Theme(
+        color_scheme_seed=ft.colors.DEEP_PURPLE,
+    )
+
     grilla = ft.GridView(
         [],
         runs_count=5,
@@ -75,6 +80,16 @@ def main(page: ft.Page):
                 ft.View(
                     "/",
                     [
+                        ft.Container(ft.Row([
+                            ft.Text("Inicio", 
+                                    size=30,
+                                    weight=ft.FontWeight.BOLD, 
+                                    color=ft.colors.WHITE, 
+                                    font_family="Consolas" )
+                        ], 
+                        alignment=ft.MainAxisAlignment.CENTER), 
+                        bgcolor=ft.colors.DEEP_PURPLE,
+                        border_radius=20),
                         inicio,
                         
                     ],
