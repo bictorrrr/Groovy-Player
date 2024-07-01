@@ -7,7 +7,7 @@ Inicializar app:
 flet run main.py
 ```
 
-![Logo](https://raw.githubusercontent.com/bictorrrr/Links-Recursos/main/Groovy/banner_groovy.png)
+![Logo](https://raw.githubusercontent.com/bictorrrr/Links_Recursos/main/Groovy/banner_groovy.png)
 
 
 ## Authors
