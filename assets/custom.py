@@ -55,24 +55,33 @@ class Album(ft.Container):
 
         if existing_button:
             self.content.controls.remove(existing_button)
-        
+
         # Agregar el nuevo FloatingActionButton
         self.content.controls.append(
-            ft.Container( ft.Container(
-                ft.Container(ft.Row([
-                    ft.Text(nombre, font_family="Archivo Black", size=10),
+            ft.Container(
+                ft.Container(
                     ft.Container(
-                        ft.Icon(ft.icons.PLAY_ARROW, color=ft.colors.WHITE),
-                        gradient=ft.RadialGradient(
-                                    colors=["#6e20cf", "#1d0b72"],
+                        ft.Row(
+                            [
+                                ft.Text(nombre, font_family="Archivo Black", size=10),
+                                ft.Container(
+                                    ft.Icon(ft.icons.PLAY_ARROW, color=ft.colors.WHITE),
+                                    gradient=ft.RadialGradient(
+                                        colors=["#6e20cf", "#1d0b72"],
+                                    ),
+                                    shape=ft.BoxShape.CIRCLE,
+                                    width=40,
+                                    height=40,
                                 ),
-                        shape=ft.BoxShape.CIRCLE,
-                        width=40,
-                        height=40
-                    )
-                ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN)), bgcolor=ft.colors.with_opacity(0.5, ft.colors.BLACK)
-            ),alignment=ft.alignment.bottom_center,
-            on_click=lambda _: guardar_album_y_navegar(album, page, audio1),)
+                            ],
+                            alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                        )
+                    ),
+                    bgcolor=ft.colors.with_opacity(0.5, ft.colors.BLACK),
+                ),
+                alignment=ft.alignment.bottom_center,
+                on_click=lambda _: guardar_album_y_navegar(album, page, audio1),
+            )
         )
         page.update()
 

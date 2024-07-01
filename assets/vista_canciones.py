@@ -4,6 +4,7 @@ import os
 from assets.metodos import reproducir_cancion
 
 reproducir = r"C:\Users\victo\Music\MUSICA\Albumes"
+ruta = r"C:\Users\victo\Music\MUSICA\Album_covers"
 
 
 def mostrar_canciones(page: ft.Page, canciones_listview: ft.ListView, audio1: ft.Audio):
@@ -19,17 +20,26 @@ def mostrar_canciones(page: ft.Page, canciones_listview: ft.ListView, audio1: ft
             if archivo.endswith(".flac"):
                 cancion_nombre = os.path.splitext(archivo)[0]
                 canciones_listview.controls.append(
-                    ft.ListTile(
-                        leading=ft.Text(f"{numero}"),
-                        title=ft.Text(cancion_nombre),
-                        trailing=ft.IconButton(
-                            icon=ft.icons.PLAY_ARROW,
-                            bgcolor=ft.colors.DEEP_PURPLE,
-                            icon_color=ft.colors.WHITE,
-                            on_click=lambda _, cancion=cancion_nombre: reproducir_cancion(
-                                cancion, page
-                            ),
-                        ),
+                    ft.Row(
+                        [
+                            ft.Container(
+                                ft.Row(
+                                    [
+                                        ft.Text(cancion_nombre),
+                                        ft.Container(
+                                            ft.Icon(ft.icons.PLAY_ARROW),
+                                            on_click=lambda _, cancion=cancion_nombre: reproducir_cancion(
+                                                cancion, page
+                                            ),
+                                        ),
+                                    ],
+                                    alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                                    width=page.window.width - 250,
+                                )
+                            )
+                        ],
+                        width=page.window.width - 250,
+                        alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                     )
                 )
                 numero += 1
@@ -38,14 +48,62 @@ def mostrar_canciones(page: ft.Page, canciones_listview: ft.ListView, audio1: ft
 
 
 def vista_canciones(page: ft.Page, audio1: ft.Audio):
-    canciones_listview = ft.ListView([ft.Text("CANCIONNNN")])
+    canciones_listview = ft.ListView([])
 
     mostrar_canciones(page, canciones_listview, audio1)
-
+    with open("assets/ruta.json", "r") as f:
+        data = json.load(f)
+    data_album = data["Album"]
+    if "_" in data_album:
+        nombredelalbum, nombredelartista = data_album.split("_", 1)
     canciones = ft.Column(
         [
+            ft.Container(
+                ft.Row(
+                    [
+                        ft.Text(
+                            nombredelalbum,
+                            size=30,
+                            weight=ft.FontWeight.BOLD,
+                            color=ft.colors.WHITE,
+                            font_family="Archivo Black",
+                        )
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                ),
+                gradient=ft.LinearGradient(
+                    begin=ft.alignment.top_left,
+                    end=ft.alignment.top_right,
+                    colors=["#6e20cf", "#1d0b72"],
+                ),
+                border_radius=20,
+            ),
+            ft.Row(
+                [
+                    ft.Text(
+                        f"De: {nombredelartista}",
+                        font_family="Archivo Black",
+                        color=ft.colors.WHITE,
+                    )
+                ],
+                alignment=ft.MainAxisAlignment.CENTER,
+            ),
             ft.Row([ft.TextButton("Regresar", on_click=lambda _: page.go("/"))]),
-            canciones_listview,
+            ft.Row(
+                [
+                    ft.Column(
+                        [
+                            ft.Image(
+                                src=ruta + "/" + nombredelalbum + ".jpg",
+                                width=200,
+                                height=200,
+                            )
+                        ]
+                    ),
+                    ft.Column([canciones_listview]),
+                ],
+                alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+            ),
         ]
     )
     return canciones

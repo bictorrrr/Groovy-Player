@@ -42,7 +42,7 @@ def main(page: ft.Page):
         color_scheme_seed=ft.colors.DEEP_PURPLE,
     )
     page.fonts = {
-        "Archivo Black" : "https://raw.githubusercontent.com/google/fonts/master/ofl/archivoblack/ArchivoBlack-Regular.ttf"
+        "Archivo Black": "https://raw.githubusercontent.com/google/fonts/master/ofl/archivoblack/ArchivoBlack-Regular.ttf"
     }
     grilla = ft.GridView(
         [],
