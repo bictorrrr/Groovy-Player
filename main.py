@@ -3,7 +3,7 @@ from assets.custom import Album
 from assets.vista_canciones import vista_canciones
 import os
 import json
-
+from math import pi
 
 with open("assets/ruta.json", "r") as f:
     data = json.load(f)
@@ -38,11 +38,12 @@ audio1 = ft.Audio(
 
 def main(page: ft.Page):
     page.title = "Groovy Player 🎵"
-    page.theme_mode = ft.ThemeMode.LIGHT
     page.theme = ft.Theme(
         color_scheme_seed=ft.colors.DEEP_PURPLE,
     )
-
+    page.fonts = {
+        "Archivo Black" : "https://raw.githubusercontent.com/google/fonts/master/ofl/archivoblack/ArchivoBlack-Regular.ttf"
+    }
     grilla = ft.GridView(
         [],
         runs_count=5,
@@ -86,16 +87,20 @@ def main(page: ft.Page):
                         ft.Row(
                             [
                                 ft.Text(
-                                    "Inicio",
+                                    "Groovy Music",
                                     size=30,
                                     weight=ft.FontWeight.BOLD,
                                     color=ft.colors.WHITE,
-                                    font_family="Consolas",
+                                    font_family="Archivo Black",
                                 )
                             ],
                             alignment=ft.MainAxisAlignment.CENTER,
                         ),
-                        bgcolor=ft.colors.DEEP_PURPLE,
+                        gradient=ft.LinearGradient(
+                            begin=ft.alignment.top_left,
+                            end=ft.alignment.top_right,
+                            colors=["#6e20cf", "#1d0b72"],
+                        ),
                         border_radius=20,
                     ),
                     inicio,
