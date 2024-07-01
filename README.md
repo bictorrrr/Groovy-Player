@@ -7,7 +7,7 @@ Inicializar app:
 flet run main.py
 ```
 
-![Logo](https://drive.google.com/file/d/1cuPx0QBcpijXWDV7SxF6lr3LwqybwDb_/view?usp=drive_link)
+![Logo](https://raw.githubusercontent.com/bictorrrr/Groovy-Player/main/assets/icon.png)
 
 
 ## Authors
