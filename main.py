@@ -5,14 +5,16 @@ import os
 import json
 
 
-with open('assets/ruta.json', 'r') as f:
+with open("assets/ruta.json", "r") as f:
     data = json.load(f)
 ruta = os.getcwd()
 print(ruta)
 reproducir = r"C:\Users\victo\Music\MUSICA\Albumes"
-album = data['Album']
-cancion = data['Cancion']
-url = reproducir+"\\"+album+"\\"+cancion
+album = data["Album"]
+cancion = data["Cancion"]
+url = reproducir + "\\" + album + "\\" + cancion
+
+
 def obtener_cancion():
     global url
     final = url
@@ -20,19 +22,19 @@ def obtener_cancion():
     return final
 
 
-
 eleccion = obtener_cancion()
 audio1 = ft.Audio(
-        src=eleccion,
-        autoplay=False,
-        volume=1,
-        balance=0,
-        on_loaded=lambda _: print("Loaded"),
-        on_duration_changed=lambda e: print("Duration changed:", e.data),
-        on_position_changed=lambda e: print("Position changed:", e.data),
-        on_state_changed=lambda e: print("State changed:", e.data),
-        on_seek_complete=lambda _: print("Seek complete"),
-    )
+    src=eleccion,
+    autoplay=False,
+    volume=1,
+    balance=0,
+    on_loaded=lambda _: print("Loaded"),
+    on_duration_changed=lambda e: print("Duration changed:", e.data),
+    on_position_changed=lambda e: print("Position changed:", e.data),
+    on_state_changed=lambda e: print("State changed:", e.data),
+    on_seek_complete=lambda _: print("Seek complete"),
+)
+
 
 def main(page: ft.Page):
     page.title = "Groovy Player 🎵"
@@ -52,11 +54,11 @@ def main(page: ft.Page):
     try:
         for album in os.listdir(reproducir):
             ruta_completa = os.path.join(reproducir, album)
-            if '_' in album:
-                nombredelalbum, nombredelartista = album.split('_', 1)
+            if "_" in album:
+                nombredelalbum, nombredelartista = album.split("_", 1)
             else:
                 nombredelalbum = album
-                nombredelartista = 'Desconocido'
+                nombredelartista = "Desconocido"
             grilla.controls.append(Album(nombredelalbum, album, page, audio1))
             if os.path.isdir(ruta_completa):
                 print(album)
@@ -75,37 +77,40 @@ def main(page: ft.Page):
     page.overlay.append(audio1)
 
     def route_change(route, valor=None):
-            page.views.clear()
+        page.views.clear()
+        page.views.append(
+            ft.View(
+                "/",
+                [
+                    ft.Container(
+                        ft.Row(
+                            [
+                                ft.Text(
+                                    "Inicio",
+                                    size=30,
+                                    weight=ft.FontWeight.BOLD,
+                                    color=ft.colors.WHITE,
+                                    font_family="Consolas",
+                                )
+                            ],
+                            alignment=ft.MainAxisAlignment.CENTER,
+                        ),
+                        bgcolor=ft.colors.DEEP_PURPLE,
+                        border_radius=20,
+                    ),
+                    inicio,
+                ],
+            )
+        )
+        if page.route == "/canciones":
             page.views.append(
                 ft.View(
-                    "/",
-                    [
-                        ft.Container(ft.Row([
-                            ft.Text("Inicio", 
-                                    size=30,
-                                    weight=ft.FontWeight.BOLD, 
-                                    color=ft.colors.WHITE, 
-                                    font_family="Consolas" )
-                        ], 
-                        alignment=ft.MainAxisAlignment.CENTER), 
-                        bgcolor=ft.colors.DEEP_PURPLE,
-                        border_radius=20),
-                        inicio,
-                        
-                    ],
+                    "/canciones",
+                    [vista_canciones(page, audio1)],
                 )
             )
-            if page.route == "/canciones":
-                page.views.append(
-                    ft.View(
-                        "/canciones",
-                        [
-                            vista_canciones(page, audio1)
-                        ],
-                    )
-                )
-            
-            page.update()
+
+        page.update()
 
     def view_pop(view):
         try:
@@ -114,10 +119,10 @@ def main(page: ft.Page):
             page.go(top_view.route)
         except:
             print("ERROR INESPERADO")
+
     page.on_route_change = route_change
     page.on_view_pop = view_pop
     page.go("/")
-
 
 
 ft.app(target=main)

@@ -6,18 +6,19 @@ reproducir = r"C:\Users\victo\Music\MUSICA\Albumes"
 album = ""
 cancion = ""
 
+
 def reproducir_cancion(eleccion, page: ft.Page):
     global album
     global cancion
     global url
     print(f"LA CANCION SERAAAA: {eleccion}")
-    with open('assets/ruta.json', 'r') as f:
+    with open("assets/ruta.json", "r") as f:
         data = json.load(f)
-    data['Cancion'] = eleccion
-    with open('assets/ruta.json', 'w') as f:
+    data["Cancion"] = eleccion
+    with open("assets/ruta.json", "w") as f:
         json.dump(data, f)
 
-    album = data['Album']
+    album = data["Album"]
     cancion = eleccion + ".flac"
     url = os.path.join(reproducir, album, cancion)
 
@@ -26,7 +27,9 @@ def reproducir_cancion(eleccion, page: ft.Page):
         if isinstance(component, ft.Audio):
             page.overlay.remove(component)
             break
-    progreso = ft.ProgressBar(value=0.0, color=ft.colors.RED_800, bgcolor=ft.colors.GREEN_500)
+    progreso = ft.ProgressBar(
+        value=0.0, color=ft.colors.RED_800, bgcolor=ft.colors.GREEN_500
+    )
     # Crear y añadir el nuevo componente de audio
     audio1 = ft.Audio(
         src=url,
@@ -39,6 +42,7 @@ def reproducir_cancion(eleccion, page: ft.Page):
         on_state_changed=lambda e: print("State changed:", e.data),
         on_seek_complete=lambda _: print("Seek complete"),
     )
+
     def actualizar_progreso(e):
         if audio1.get_duration() > 0:
             progreso.value = audio1.get_current_position() / audio1.get_duration()
