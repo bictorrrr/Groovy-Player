@@ -16,6 +16,38 @@ def guardar_album_y_navegar(album, page, audio1):
     # Navegar a "/cartas_vista"
     page.go("/canciones")
 
+class Barras_Controles(ft.Container):
+    def __init__(self, imagen: str, nombrecancion: str, artista: str, progreso: ft.Control, page: ft.Page):
+        super().__init__()
+        self.bgcolor = ft.colors.BLACK12
+        self.alignment = ft.alignment.bottom_right
+        self.content = ft.Row([
+            ft.Row([
+                ft.Image(
+                    src=ruta+"/"+imagen+".jpg",
+                    width=55,
+                    height=55
+                ),
+                ft.Column(
+                    [
+                        ft.Text(nombrecancion),
+                        ft.Text(artista)
+                    ]
+                ),
+            ]),
+            ft.Column(
+                [
+                    progreso,
+                    ft.Row([
+                        ft.IconButton(icon=ft.icons.SKIP_PREVIOUS),
+                        ft.IconButton(icon=ft.icons.PLAY_ARROW),
+                        ft.IconButton(icon=ft.icons.SKIP_NEXT)
+                    ], alignment=ft.MainAxisAlignment.CENTER)
+                ], width=page.window.width-230
+            ),
+            ft.Icon(ft.icons.VOLUME_UP)
+        ]
+        )
 
 class Album(ft.Container):
     def __init__(self, nombre, album, page, audio1):

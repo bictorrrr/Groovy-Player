@@ -1,13 +1,14 @@
 import flet as ft
 import os
 import json
+from assets.custom import Barras_Controles
 
 reproducir = r"C:\Users\victo\Music\MUSICA\Albumes"
 album = ""
 cancion = ""
 
 
-def reproducir_cancion(eleccion, page: ft.Page):
+def reproducir_cancion(eleccion, page: ft.Page, contenedor: ft.Container):
     global album
     global cancion
     global url
@@ -27,9 +28,14 @@ def reproducir_cancion(eleccion, page: ft.Page):
         if isinstance(component, ft.Audio):
             page.overlay.remove(component)
             break
+    for component in page.overlay:
+        if isinstance(component, ft.Container):
+            page.overlay.remove(component)
+            break
     progreso = ft.ProgressBar(
-        value=0.0, color=ft.colors.RED_800, bgcolor=ft.colors.GREEN_500
+        value=0.0, color=ft.colors.DEEP_PURPLE, bgcolor=ft.colors.BLACK12
     )
+    
     # Crear y añadir el nuevo componente de audio
     audio1 = ft.Audio(
         src=url,
@@ -50,4 +56,6 @@ def reproducir_cancion(eleccion, page: ft.Page):
 
     page.overlay.append(audio1)
     page.overlay.append(progreso)
+    page.add(Barras_Controles("Kaya", "Kaya", "Bob Marley", progreso, page))
+    contenedor.content = Barras_Controles("Kaya", "Kaya", "Bob Marley", progreso, page)
     page.update()
