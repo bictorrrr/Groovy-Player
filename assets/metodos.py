@@ -1,11 +1,15 @@
 import flet as ft
 import os
 import json
-from assets.custom import Barras_Controles
+from assets.custom import Barra_Inferior, Progreso
 
 reproducir = r"C:\Users\victo\Music\MUSICA\Albumes"
 album = ""
 cancion = ""
+
+def regresar(page: ft.Page,contenedor: ft.Container):
+    page.go("/")
+    
 
 
 def reproducir_cancion(eleccion, page: ft.Page, contenedor: ft.Container):
@@ -18,8 +22,11 @@ def reproducir_cancion(eleccion, page: ft.Page, contenedor: ft.Container):
     data["Cancion"] = eleccion
     with open("assets/ruta.json", "w") as f:
         json.dump(data, f)
-
+    imagen = data['Imagen']
+    cancion_act = data['Cancion']
+    artista = data['Artista']
     album = data["Album"]
+
     cancion = eleccion + ".flac"
     url = os.path.join(reproducir, album, cancion)
 
@@ -32,9 +39,7 @@ def reproducir_cancion(eleccion, page: ft.Page, contenedor: ft.Container):
         if isinstance(component, ft.Container):
             page.overlay.remove(component)
             break
-    progreso = ft.ProgressBar(
-        value=0.0, color=ft.colors.DEEP_PURPLE, bgcolor=ft.colors.BLACK12
-    )
+    
     
     # Crear y añadir el nuevo componente de audio
     audio1 = ft.Audio(
@@ -44,18 +49,13 @@ def reproducir_cancion(eleccion, page: ft.Page, contenedor: ft.Container):
         balance=0,
         on_loaded=lambda _: print(f"Loaded: {url}"),
         on_duration_changed=lambda _: print("Ha cambiado la duracion"),
-        on_position_changed=lambda e: actualizar_progreso(e),
         on_state_changed=lambda e: print("State changed:", e.data),
         on_seek_complete=lambda _: print("Seek complete"),
     )
-
-    def actualizar_progreso(e):
-        if audio1.get_duration() > 0:
-            progreso.value = audio1.get_current_position() / audio1.get_duration()
-        page.update()
-
+    progreso = Progreso(audio1, page)
+    barra = Barra_Inferior(imagen, cancion_act, artista, progreso, page)
+    
     page.overlay.append(audio1)
     page.overlay.append(progreso)
-    page.add(Barras_Controles("Kaya", "Kaya", "Bob Marley", progreso, page))
-    contenedor.content = Barras_Controles("Kaya", "Kaya", "Bob Marley", progreso, page)
+    page.overlay.append(barra)
     page.update()

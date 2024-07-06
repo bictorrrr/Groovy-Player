@@ -1,14 +1,13 @@
 import flet as ft
 import json
 import os
-from assets.metodos import reproducir_cancion
-from assets.custom import Barras_Controles
+from assets.metodos import reproducir_cancion, regresar
+from assets.custom import Barra_Inferior, Progreso
 
 reproducir = r"C:\Users\victo\Music\MUSICA\Albumes"
 ruta = r"C:\Users\victo\Music\MUSICA\Album_covers"
 
 contenedor_barra = ft.Container()
-
 
 def bg_color(e):
     e.control.gradient = (
@@ -26,8 +25,7 @@ def bg_color(e):
     )
     e.control.update()
 
-
-def mostrar_canciones(page: ft.Page, canciones_listview: ft.ListView, audio1: ft.Audio):
+def mostrar_canciones(page: ft.Page, canciones_listview: ft.ListView):
     with open("assets/ruta.json", "r") as f:
         data = json.load(f)
 
@@ -76,11 +74,9 @@ def mostrar_canciones(page: ft.Page, canciones_listview: ft.ListView, audio1: ft
 
     page.update()
 
-
-def vista_canciones(page: ft.Page, audio1: ft.Audio):
+def vista_canciones(page: ft.Page):
     canciones_listview = ft.ListView([])
-
-    mostrar_canciones(page, canciones_listview, audio1)
+    mostrar_canciones(page, canciones_listview)
     with open("assets/ruta.json", "r") as f:
         data = json.load(f)
     data_album = data["Album"]
@@ -94,8 +90,8 @@ def vista_canciones(page: ft.Page, audio1: ft.Audio):
                         [
                             ft.Image(
                                 src=ruta + "/" + nombredelalbum + ".jpg",
-                                width=200,
-                                height=200,
+                                width=150,
+                                height=150,
                             )
                         ]
                     ),
@@ -113,15 +109,16 @@ def vista_canciones(page: ft.Page, audio1: ft.Audio):
                                         )
                                     ],
                                     alignment=ft.MainAxisAlignment.CENTER,
-                                    width=page.window.width - 250,
-                                    height=100
+                                    width=page.window.width - 197,
+                                    height=120
                                 ),
                                 gradient=ft.LinearGradient(
                                     begin=ft.alignment.top_left,
                                     end=ft.alignment.top_right,
-                                    colors=["#6e20cf", "#1d0b72"],
+                                    colors=["#641ec4", "#1d0b72"],
                                 ),
-                                border_radius=20,
+                                border_radius=ft.BorderRadius(top_left=0, top_right=0, bottom_left=20, bottom_right=20),
+                                
                             ),
                             ft.Container(ft.Row(
                                 [
@@ -157,21 +154,34 @@ def vista_canciones(page: ft.Page, audio1: ft.Audio):
                                                 ],
                                             ),
                                         ]
-                                    )
+                                    ),
                                 ],
                                 alignment=ft.MainAxisAlignment.CENTER,
-                                width=page.window.width - 250,
-                                height=100
-                            ),
-                            bgcolor=ft.colors.BLACK12,
-                            border_radius=20)
-                        ], alignment=ft.MainAxisAlignment.END
-                    ),
+                            ))
+                        ],
+                        alignment=ft.MainAxisAlignment.CENTER,
+                        
+                    )
                 ]
             ),
-            ft.Row([ft.TextButton("Regresar", on_click=lambda _: page.go("/"))]),
-            ft.Column([canciones_listview]),
+            ft.Text(
+                "Canciones",
+                size=20,
+                weight=ft.FontWeight.BOLD,
+                color=ft.colors.WHITE,
+                font_family="Archivo Black",
+            ),
+            canciones_listview,
+            ft.FilledButton(
+                "Regresar",
+                icon=ft.icons.ARROW_BACK,
+                on_click=lambda _: regresar(page, contenedor_barra)
+            ),
             contenedor_barra
-        ], alignment= ft.MainAxisAlignment.START
+        ]
     )
-    return canciones
+
+    return ft.Container(
+        canciones,
+        expand=True,
+    )

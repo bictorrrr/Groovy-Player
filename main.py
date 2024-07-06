@@ -1,5 +1,5 @@
 import flet as ft
-from assets.custom import Album
+from assets.custom import Album, Barra_Inferior, Progreso
 from assets.vista_canciones import vista_canciones
 import os
 import json
@@ -12,7 +12,20 @@ print(ruta)
 reproducir = r"C:\Users\victo\Music\MUSICA\Albumes"
 album = data["Album"]
 cancion = data["Cancion"]
+artista = data["Artista"]
+imagen =data["Imagen"]
 url = reproducir + "\\" + album + "\\" + cancion
+
+audio1 = ft.Audio(
+        src=url,
+        autoplay=True,
+        volume=1,
+        balance=0,
+        on_loaded=lambda _: print(f"Loaded: {url}"),
+        on_duration_changed=lambda _: print("Ha cambiado la duracion"),
+        on_state_changed=lambda e: print("State changed:", e.data),
+        on_seek_complete=lambda _: print("Seek complete"),
+    )
 
 
 def obtener_cancion():
@@ -21,19 +34,7 @@ def obtener_cancion():
     print(f"ESTE ES LA RUTA: {final}")
     return final
 
-
 eleccion = obtener_cancion()
-audio1 = ft.Audio(
-    src=eleccion,
-    autoplay=False,
-    volume=1,
-    balance=0,
-    on_loaded=lambda _: print("Loaded"),
-    on_duration_changed=lambda e: print("Duration changed:", e.data),
-    on_position_changed=lambda e: print("Position changed:", e.data),
-    on_state_changed=lambda e: print("State changed:", e.data),
-    on_seek_complete=lambda _: print("Seek complete"),
-)
 
 
 def main(page: ft.Page):
@@ -44,6 +45,9 @@ def main(page: ft.Page):
     page.fonts = {
         "Archivo Black": "https://raw.githubusercontent.com/google/fonts/master/ofl/archivoblack/ArchivoBlack-Regular.ttf"
     }
+    page.window.maximized = True
+    progreso = Progreso(audio1, page)
+    page.overlay.append(Barra_Inferior(imagen, cancion, artista, progreso, page))
     grilla = ft.GridView(
         [],
         runs_count=5,
@@ -60,7 +64,7 @@ def main(page: ft.Page):
             else:
                 nombredelalbum = album
                 nombredelartista = "Desconocido"
-            grilla.controls.append(Album(nombredelalbum, album, page, audio1))
+            grilla.controls.append(Album(nombredelalbum, nombredelartista, album, imagen, page))
             if os.path.isdir(ruta_completa):
                 print(album)
     except FileNotFoundError:
@@ -75,7 +79,6 @@ def main(page: ft.Page):
             ]
         )
     )
-    page.overlay.append(audio1)
 
     def route_change(route, valor=None):
         page.views.clear()
@@ -83,6 +86,7 @@ def main(page: ft.Page):
             ft.View(
                 "/",
                 [
+                    ft.Container(ft.Row([ft.Text("Empty")], height=60)),
                     ft.Container(
                         ft.Row(
                             [
@@ -95,13 +99,14 @@ def main(page: ft.Page):
                                 )
                             ],
                             alignment=ft.MainAxisAlignment.CENTER,
+                            height=60
                         ),
                         gradient=ft.LinearGradient(
                             begin=ft.alignment.top_left,
                             end=ft.alignment.top_right,
                             colors=["#6e20cf", "#1d0b72"],
                         ),
-                        border_radius=20,
+                        border_radius=ft.BorderRadius(top_left=0, top_right=0, bottom_left=20, bottom_right=20),
                     ),
                     inicio,
                 ],
@@ -111,10 +116,11 @@ def main(page: ft.Page):
             page.views.append(
                 ft.View(
                     "/canciones",
-                    [vista_canciones(page, audio1)],
+                    [ft.Container(ft.Row([ft.Text("Empty")], height=60)),
+                    vista_canciones(page)],
                 )
             )
-
+        
         page.update()
 
     def view_pop(view):
@@ -128,6 +134,7 @@ def main(page: ft.Page):
     page.on_route_change = route_change
     page.on_view_pop = view_pop
     page.go("/")
-
+    
+    page.update()
 
 ft.app(target=main)
